@@ -22,11 +22,12 @@ namespace StarChart.Controllers
         }
 
         [HttpGet("{id:int}", Name ="GetById")]
-        public IActionResult GetByID(int Id)
+        public IActionResult GetById(int Id)
         {
 
             var celestialObject = _context.CelestialObjects.Find(Id);
-            if (celestialObject == null) NotFound("No Satelite was found with that Id");
+            if (celestialObject == null)
+                NotFound();
 
             celestialObject.Satellites = _context.CelestialObjects.Where(e => e.OrbitedObjectId == Id).ToList();
             return Ok(celestialObject);
@@ -37,7 +38,8 @@ namespace StarChart.Controllers
         public IActionResult GetByName(string name)
         {
             var celestialObjects = _context.CelestialObjects.Where(e => e.Name == name);
-            if (!celestialObjects.Any()) return NotFound("No Celestial Object found");
+            if (!celestialObjects.Any())
+                return NotFound();
 
             foreach (var celestialObject in celestialObjects)
             {
